@@ -1,0 +1,47 @@
+---
+- name: Create a mongo dump
+  hosts: localhost
+  vars:
+    delete_old_files: "{{ prune | default('no') }}"
+
+  tasks:
+
+    - name: The mongo apt key is present
+      apt_key:
+        id: 4B7C549A058F8B6B
+        url: https://www.mongodb.org/static/pgp/server-4.2.asc
+
+    - name: The mongo apt repository is present
+      apt_repository:
+        repo: deb http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.2 main
+
+    - name: mongodb packages are present
+      apt: 
+        name: mongodb-org
+
+    - name: The mongo_dumps target folder is present
+      file:
+        path: "{{ mongo_dumps_target_folder }}"
+        state: directory
+
+    - name: Dump the database
+      command: >
+        mongodump
+        --host "{{ db_host }}"
+        --port {{ db_port }}
+        --out {{ mongo_dumps_target_folder }}/{{ db_name }}-{{ lookup('pipe','date +%Y-%m-%d_%H-%M-%S') }}
+        --db {{ db_name }}
+
+    - name: Find dumps older than 7 days
+      find:
+        paths: "{{ mongo_dumps_target_folder }}"
+        age: 7d
+      register: files_to_delete
+      when: delete_old_files == "yes"
+
+    - name: Delete previously found dumps
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ files_to_delete.files }}"
+      when: delete_old_files == "yes"
