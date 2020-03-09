@@ -36,6 +36,7 @@
       find:
         paths: "{{ mongo_dumps_target_folder }}"
         age: 7d
+        file_type: any
       register: files_to_delete
       when: delete_old_files == "yes"
 
