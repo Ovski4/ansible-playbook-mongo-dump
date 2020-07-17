@@ -14,8 +14,6 @@ services:
         -e "db_port=27017"
         -e "db_host=mongo.domain.org"
         -e "db_name=mongo_db_name"
-    environment:
-      - ANSIBLE_HOST_KEY_CHECKING=False
     networks:
       - mongo_container_network
 
