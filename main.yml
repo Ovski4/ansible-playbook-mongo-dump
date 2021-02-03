@@ -8,12 +8,12 @@
 
     - name: The mongo apt key is present
       apt_key:
-        id: 4B7C549A058F8B6B
-        url: https://www.mongodb.org/static/pgp/server-4.2.asc
+        id: 656408E390CFB1F5
+        url: https://www.mongodb.org/static/pgp/server-4.4.asc
 
     - name: The mongo apt repository is present
       apt_repository:
-        repo: deb http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.2 main
+        repo: deb http://repo.mongodb.org/apt/debian buster/mongodb-org/4.4 main
 
     - name: mongodb packages are present
       apt: 
