@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   mongo-dump:
-    image: ovski/ansible:v2.9.6
+    image: ovski/ansible:v2.13.3
     volumes:
       - /tmp/mongo_dumps:/var/folder/mongo_dumps
       - ./:/var/www/ansible/playbooks/mongo-dump
